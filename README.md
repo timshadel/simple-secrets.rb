@@ -1,5 +1,5 @@
 
-# SimpleSecrets [![Build Status](https://travis-ci.org/timshadel/simple_secrets.png?branch=master)](https://travis-ci.org/timshadel/simple_secrets)
+# SimpleSecrets [![Build Status](https://travis-ci.org/timshadel/simple-secrets.rb.png?branch=master)](https://travis-ci.org/timshadel/simple-secrets.rb)
 
 A Ruby client for [simple-secrets][simple-secrets], the simple, opinionated library for encrypting small packets of data securely.
 
@@ -12,7 +12,7 @@ A Ruby client for [simple-secrets][simple-secrets], the simple, opinionated libr
 Send:
 
 ```ruby
-require('simple_secrets')
+require('simple-secrets')
 
 # Try `head /dev/urandom | shasum -a 256` to make a decent 256-bit key
 master_key = new Buffer('<64-char hex string (32 bytes, 256 bits)>', 'hex');
@@ -26,7 +26,7 @@ var packet = sender.pack('this is a secret message');
 Receive:
 
 ```js
-var secrets = require('simple_secrets');
+var secrets = require('simple-secrets');
 
 // Same shared key
 var master_key = new Buffer('<shared-key-hex>', 'hex');
