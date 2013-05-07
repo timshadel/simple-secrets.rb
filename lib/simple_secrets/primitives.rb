@@ -121,10 +121,10 @@ module SimpleSecrets
       cipher = OpenSSL::Cipher::AES256.new(:CBC)
       cipher.encrypt
       cipher.key = key
-      cipher.random_iv
+      iv = cipher.random_iv
 
       encrypted = ''.force_encoding('BINARY')
-      encrypted << cipher.iv
+      encrypted << iv
       encrypted << cipher.update(binary)
       encrypted << cipher.final
       encrypted
@@ -195,10 +195,10 @@ module SimpleSecrets
     #
     # Returns a 32-byte MAC binary string
     def self.mac binary, hmac_key
-      assertBinary(binary, hmacKey)
-      assert256BitBinary(hmacKey);
+      assertBinary(binary, hmac_key)
+      assert256BitBinary(hmac_key)
 
-      OpenSSL::HMAC.new(OpenSSL::Digest::SHA256.new, hmac_key, binary)
+      OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, hmac_key, binary)
     end
 
 
@@ -356,7 +356,7 @@ private
     end
 
     def self.assertBinary *binaries
-      binaries.each { |binary| raise "Bad encoding (#{binary.encoding}). Binary string required." unless binary.encoding == Encoding::ASCII_8BIT }
+      binaries.each { |binary| raise "Bad encoding. Binary string required." unless binary.instance_of?(String) && binary.encoding == Encoding::ASCII_8BIT }
     end
 
     def self.assert256BitBinary binary
