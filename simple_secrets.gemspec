@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'simple_secrets/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "simple_secrets"
+  spec.name          = "simple-secrets"
   spec.version       = SimpleSecrets::VERSION
   spec.authors       = ["Tim Shadel"]
   spec.email         = ["tim@shadelsoftware.com"]
   spec.description   = %q{A Ruby client for simple-secrets, the simple, opinionated library for encrypting small packets of data securely.}
   spec.summary       = %q{A Ruby client for simple-secrets, the simple, opinionated library for encrypting small packets of data securely.}
-  spec.homepage      = "https://github.com/timshadel/simple_secrets"
+  spec.homepage      = "https://github.com/timshadel/simple-secrets.rb"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
