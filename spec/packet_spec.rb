@@ -4,11 +4,11 @@ include SimpleSecrets
 
 describe Packet do
 
-  let(:master_key){ 'e33f2a7d4f03568cfa955b3316a345653a9d6f0afbb9f66cc10f906f8091e317' }
+  let(:master_key){ 'cd'.hex_to_bin(32) }
   let(:data){ 'foobar' }
-  let(:nonce){ "\r\x82~\x14v\e\xC8\x8F\xD1;\fB\xE3)6\xEC".encode 'BINARY' }  # Generated with Primitives.nonce
+  let(:nonce){ '11'.hex_to_bin(16) }  # Generated with Primitives.nonce
 
-  let(:test_body){ "\r\x82~\x14v\e\xC8\x8F\xD1;\fB\xE3)6\xEC\xA6foobar".encode 'BINARY' }
+  let(:test_body){ "\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\xA6foobar".encode 'BINARY' }
 
   subject{ Packet.new master_key }
 
@@ -35,6 +35,14 @@ describe Packet do
   describe '#body_to_data' do
     it 'it splits out the nonce and deserializes the body' do
       subject.body_to_data(test_body).should eq data
+    end
+  end
+
+  describe 'encrypt and decrypt' do
+    it 'encrypts the data and then decrypts it' do
+      cipher_data = subject.encrypt_body test_body, master_key
+      decrypted = subject.decrypt_body cipher_data, master_key
+      decrypted.should eq test_body
     end
   end
 end
