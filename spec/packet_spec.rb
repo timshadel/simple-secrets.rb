@@ -38,11 +38,13 @@ describe Packet do
     end
   end
 
-  describe 'encrypt and decrypt' do
+  describe '#encrypt_body and #decrypt_body' do
     it 'encrypts the data and then decrypts it' do
       cipher_data = subject.encrypt_body test_body, master_key
-      decrypted = subject.decrypt_body cipher_data, master_key
-      decrypted.should eq test_body
+      decrypted_body = subject.decrypt_body cipher_data, master_key
+      test_body.should_not eq cipher_data
+      cipher_data.should_not eq decrypted_body
+      decrypted_body.should eq test_body
     end
   end
 end
