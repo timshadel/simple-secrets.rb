@@ -15,9 +15,7 @@ module SimpleSecrets
       nonce = Primitives.nonce
       bindata = Primitives.serialize data
 
-      body = "".encode 'BINARY'
-      body << nonce
-      body << bindata
+      body = "#{nonce}#{bindata}"
 
       Primitives.zero nonce, bindata
       body
@@ -51,6 +49,31 @@ module SimpleSecrets
 
       Primitives.zero key, iv, encrypted
       body
+    end
+
+    def authenticate data, master_key, identity
+      hmac_key = Primitives.derive_sender_hmac master_key
+
+      auth = "#{identity}#{data}"
+      mac = Primitives.mac auth, hmac_key
+      packet = "#{auth}#{mac}"
+
+      Primitives.zero hmac_key, mac
+      packet
+    end
+
+    def verify packet, master_key, identity
+      packet_id = packet[0...6]
+      return nil unless Primitives.compare packet_id, identity
+
+      data = packet[0...-32]
+      packet_mac = packet[-32..-1]
+      hmac_key = Primitives.derive_sender_hmac master_key
+      mac = Primitives.mac data, hmac_key
+      return nul unless Primitives.compare packet_mac, mac
+
+      Primitives.zero hmac_key, mac
+      packet[6...-32]
     end
   end
 end

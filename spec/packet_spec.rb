@@ -47,4 +47,15 @@ describe Packet do
       decrypted_body.should eq test_body
     end
   end
+
+  describe '#authenticate and #verify' do
+    it 'creates an authentication signature and then verifies it' do
+      key = subject.instance_variable_get(:@master_key)
+      id = subject.instance_variable_get(:@identity)
+
+      packet = subject.authenticate test_body, key, id
+      data = subject.verify packet, key, id
+      data.should eq test_body
+    end
+  end
 end
