@@ -75,5 +75,28 @@ module SimpleSecrets
       Primitives.zero hmac_key, mac
       packet[6...-32]
     end
+
+    def pack data
+      body = build_body data
+      encrypted = encrypt_body body, @master_key
+      packet = authenticate encrypted, @master_key, @identity
+      websafe = Primitives.stringify packet
+
+      Primitives.zero body, encrypted, packet
+      websafe
+    end
+
+    def unpack websafe_data
+      packet = Primitives.binify websafe_data
+      cipher_data = verify packet, @master_key, @identity
+      Primitives.zero packet
+      return nil unless cipher_data
+
+      body = decrypt_body cipher_data, @master_key
+      data = body_to_data body
+
+      Primitives.zero body, cipher_data
+      data
+    end
   end
 end

@@ -4,11 +4,12 @@ include SimpleSecrets
 
 describe Packet do
 
-  let(:master_key){ 'cd'.hex_to_bin(32) }
+  let(:master_key){ 'cd'.hex_to_bin 32 }
   let(:data){ 'foobar' }
-  let(:nonce){ '11'.hex_to_bin(16) }  # Generated with Primitives.nonce
+  let(:nonce){ '11'.hex_to_bin 16 }  # Generated with Primitives.nonce
 
   let(:test_body){ "\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\xA6foobar".encode 'BINARY' }
+  let(:bad_id){ 'fd'.hex_to_bin 6 }
 
   subject{ Packet.new master_key }
 
@@ -39,7 +40,7 @@ describe Packet do
   end
 
   describe '#encrypt_body and #decrypt_body' do
-    it 'encrypts the data and then decrypts it' do
+    it 'encrypts the data and then decrypts it back' do
       cipher_data = subject.encrypt_body test_body, master_key
       decrypted_body = subject.decrypt_body cipher_data, master_key
       test_body.should_not eq cipher_data
@@ -56,6 +57,34 @@ describe Packet do
       packet = subject.authenticate test_body, key, id
       data = subject.verify packet, key, id
       data.should eq test_body
+    end
+
+    it 'returns nil if the key identity does not match' do
+      key = subject.instance_variable_get(:@master_key)
+      id = subject.instance_variable_get(:@identity)
+
+      packet = subject.authenticate test_body, key, bad_id
+      data = subject.verify packet, key, id
+      data.should be_nil
+    end
+
+    it 'returns nil if the MAC does not match' do
+      key = subject.instance_variable_get(:@master_key)
+      id = subject.instance_variable_get(:@identity)
+
+      packet = subject.authenticate test_body, key, bad_id
+      data = subject.verify packet, key, id
+      data.should be_nil
+    end
+  end
+
+  describe '.pack and .unpack' do
+    it 'encrypts and signs data into web-safe string, then verifies and decrypts it back' do
+      packed_data = subject.pack data
+      packed_data.should_not eq data
+
+      unpacked_data = subject.unpack packed_data
+      unpacked_data.should eq data
     end
   end
 end
