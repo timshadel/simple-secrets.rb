@@ -70,7 +70,7 @@ module SimpleSecrets
       packet_mac = packet[-32..-1]
       hmac_key = Primitives.derive_sender_hmac master_key
       mac = Primitives.mac data, hmac_key
-      return nul unless Primitives.compare packet_mac, mac
+      return nil unless Primitives.compare packet_mac, mac
 
       Primitives.zero hmac_key, mac
       packet[6...-32]

@@ -10,6 +10,7 @@ describe Packet do
 
   let(:test_body){ "\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\xA6foobar".encode 'BINARY' }
   let(:bad_id){ 'fd'.hex_to_bin 6 }
+  let(:bad_mac){ 'fd'.hex_to_bin 32 }
 
   subject{ Packet.new master_key }
 
@@ -72,7 +73,9 @@ describe Packet do
       key = subject.instance_variable_get(:@master_key)
       id = subject.instance_variable_get(:@identity)
 
-      packet = subject.authenticate test_body, key, bad_id
+      packet = subject.authenticate test_body, key, id
+      packet = "#{packet[0...-32]}#{bad_mac}"
+
       data = subject.verify packet, key, id
       data.should be_nil
     end
