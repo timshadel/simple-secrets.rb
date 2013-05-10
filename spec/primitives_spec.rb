@@ -359,11 +359,4 @@ describe Primitives do
       expect(c).to eq(z)
     end
   end
-
-end
-
-class String
-  def hex_to_bin repeat=1
-    [self*repeat].pack('H*')
-  end
 end

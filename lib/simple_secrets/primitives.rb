@@ -38,7 +38,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.derive_sender_hmac(master_key)
-    #   # => 
+    #   # =>
     #
     # Returns 256-bit sender hmac key
     def self.derive_sender_hmac master_key
@@ -56,7 +56,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.derive_sender_key(master_key)
-    #   # => 
+    #   # =>
     #
     # Returns 256-bit sender encryption key
     def self.derive_sender_key master_key
@@ -74,7 +74,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.derive_receiver_hmac(master_key)
-    #   # => 
+    #   # =>
     #
     # Returns 256-bit receiver hmac key
     def self.derive_receiver_hmac master_key
@@ -92,7 +92,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.derive_receiver_key(master_key)
-    #   # => 
+    #   # =>
     #
     # Returns 256-bit receiver encryption key
     def self.derive_receiver_key master_key
@@ -110,7 +110,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.encrypt('', '')
-    #   # => 
+    #   # =>
     #
     # Returns a binary string of (IV || ciphertext)
     def self.encrypt binary, key
@@ -142,7 +142,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.decrypt('', '')
-    #   # => 
+    #   # =>
     #
     # Returns the plaintext binary string
     def self.decrypt binary, key, iv
@@ -169,7 +169,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.identify('')
-    #   # => 
+    #   # =>
     #
     # Returns a 6-byte binary string identifier
     def self.identify binary
@@ -191,7 +191,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.mac('','')
-    #   # => 
+    #   # =>
     #
     # Returns a 32-byte MAC binary string
     def self.mac binary, hmac_key
@@ -213,7 +213,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.compare('','')
-    #   # => 
+    #   # =>
     #
     # Returns true if both buffer contents match
     def self.compare a, b
@@ -241,7 +241,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.binify('')
-    #   # => 
+    #   # =>
     #
     # Returns the binary version of this string
     def self.binify string
@@ -261,7 +261,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.stringify('')
-    #   # => 
+    #   # =>
     #
     # Returns the websafe string
     def self.stringify binary
@@ -283,7 +283,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.serialize('')
-    #   # => 
+    #   # =>
     #
     # Returns the binary version of this object
     def self.serialize object
@@ -303,7 +303,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.deserialize('')
-    #   # => 
+    #   # =>
     #
     # Returns the Ruby object
     def self.deserialize binary
@@ -321,7 +321,7 @@ module SimpleSecrets
     # Examples
     #
     #   Primitives.zero('','')
-    #   # => 
+    #   # =>
     #
     # Returns an array of references to the strings which have been zeroed
     def self.zero *args
