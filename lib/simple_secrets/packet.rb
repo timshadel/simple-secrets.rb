@@ -7,7 +7,7 @@ module SimpleSecrets
     def initialize master_key
       raise ArgumentError unless master_key
 
-      @master_key = master_key.encode 'BINARY'
+      @master_key = hex_to_bin master_key
       @identity = Primitives.identify @master_key
     end
 
@@ -97,6 +97,11 @@ module SimpleSecrets
 
       Primitives.zero body, cipher_data
       data
+    end
+
+    private
+    def hex_to_bin string
+      [string].pack('H*')
     end
   end
 end
