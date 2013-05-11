@@ -4,11 +4,11 @@ include SimpleSecrets
 
 describe Packet do
 
-  let(:master_key){ "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".encode 'BINARY' }
+  let(:master_key){ "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".force_encoding 'BINARY' }
   let(:data){ 'foobar' }
   let(:nonce){ '11'.hex_to_bin 16 }  # Generated with Primitives.nonce
 
-  let(:test_body){ "\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\xA6foobar".encode 'BINARY' }
+  let(:test_body){ "\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\xA6foobar".force_encoding 'BINARY' }
   let(:bad_id){ 'fd'.hex_to_bin 6 }
   let(:bad_mac){ 'fd'.hex_to_bin 32 }
 
