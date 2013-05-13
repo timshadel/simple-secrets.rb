@@ -1,9 +1,10 @@
 
-# SimpleSecrets [![Build Status](https://travis-ci.org/timshadel/simple-secrets.rb.png?branch=master)](https://travis-ci.org/timshadel/simple-secrets.rb)
+# simple-secrets.rb [![Build Status](https://travis-ci.org/timshadel/simple-secrets.rb.png?branch=master)](https://travis-ci.org/timshadel/simple-secrets.rb)
 
-A Ruby client for [simple-secrets][simple-secrets], the simple, opinionated library for encrypting small packets of data securely.
+A simple, opinionated library for encrypting small packets of data securely. Designed for exchanging tokens among systems written in a variety of programming languages: [Node.js][simple-secrets], [Ruby][simple-secrets.rb].
 
 [simple-secrets]: https://github.com/timshadel/simple-secrets
+[simple-secrets.rb]: https://github.com/timshadel/simple-secrets.rb
 
 ## Examples
 
