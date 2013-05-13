@@ -35,8 +35,9 @@ include SimpleSecrets
 sender = Packet.new '<64-char hex string master key (32 bytes, 256 bits)>'
 # Read data from somewhere
 packet = 'OqlG6KVMeyFYmunboS3HIXkvN_nXKTxg2yNkQydZOhvJrZvmfov54hUmkkiZCnlhzyrlwOJkbV7XnPPbqvdzZ6TsFOO5YdmxjxRksZmeIhbhLaMiDbfsOuSY1dBn_ZgtYCw-FRIM'
+
 secret_message = sender.unpack(packet);
-// => {"msg"=>"this is a secret message"}
+# => {"msg"=>"this is a secret message"}
 ```
 
 
