@@ -12,29 +12,31 @@ A Ruby client for [simple-secrets][simple-secrets], the simple, opinionated libr
 Send:
 
 ```ruby
-require('simple-secrets')
+require 'simple-secrets'
+
+include SimpleSecrets
 
 # Try `head /dev/urandom | shasum -a 256` to make a decent 256-bit key
-master_key = new Buffer('<64-char hex string (32 bytes, 256 bits)>', 'hex');
-# => <Buffer 71 c8 67 56 23 4b fd 3c 37 ... >
+sender = Packet.new '<64-char hex string master key (32 bytes, 256 bits)>'
+# => #<SimpleSecrets::Packet:0x007fec7c198e60 @master_key="d\xDD\xB5...", @identity="B\xBE...">
 
-var sender = secrets(master_key);
-var packet = sender.pack('this is a secret message');
-# => 'OqlG6KVMeyFYmunboS3HIXkvN_nXKTxg2yNkQydZOhvJrZvmfov54hUmkkiZCnlhzyrlwOJkbV7XnPPbqvdzZ6TsFOO5YdmxjxRksZmeIhbhLaMiDbfsOuSY1dBn_ZgtYCw-FRIM'
+packet = sender.pack msg: 'this is a secret message'
+# => 'Qr4m7AughkcQIRqQvlyXiB67EwHdBf5n9JD2s_Z9NpO4ksPGvLYjNbDm3HRzvFXFSpV2IqDQw_LTamndMh2c7iOQT0lSp4LstqJPAtoQklU5sb7JHYyTOuf-6W-q7W8gAnq1wCs5'
 ```
 
 Receive:
 
-```js
-var secrets = require('simple-secrets');
+```ruby
+require 'simple-secrets'
 
-// Same shared key
-var master_key = new Buffer('<shared-key-hex>', 'hex');
-var sender = secrets(master_key);
-var packet = new Buffer('<read data from somewhere>');
-// => 'OqlG6KVMeyFYmunboS3HIXkvN_nXKTxg2yNkQydZOhvJrZvmfov54hUmkkiZCnlhzyrlwOJkbV7XnPPbqvdzZ6TsFOO5YdmxjxRksZmeIhbhLaMiDbfsOuSY1dBn_ZgtYCw-FRIM'
-var secret_message = sender.unpack(packet);
-// => 'this is a secret message'
+include SimpleSecrets
+
+# Same shared key
+sender = Packet.new '<64-char hex string master key (32 bytes, 256 bits)>'
+# Read data from somewhere
+packet = 'OqlG6KVMeyFYmunboS3HIXkvN_nXKTxg2yNkQydZOhvJrZvmfov54hUmkkiZCnlhzyrlwOJkbV7XnPPbqvdzZ6TsFOO5YdmxjxRksZmeIhbhLaMiDbfsOuSY1dBn_ZgtYCw-FRIM'
+secret_message = sender.unpack(packet);
+// => {"msg"=>"this is a secret message"}
 ```
 
 
