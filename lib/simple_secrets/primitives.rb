@@ -121,7 +121,7 @@ module SimpleSecrets
       cipher = OpenSSL::Cipher::AES256.new(:CBC)
       cipher.encrypt
       cipher.key = key
-      iv = cipher.random_iv
+      iv = cipher.iv = OpenSSL::Random.random_bytes(16)
 
       encrypted = ''.force_encoding('BINARY')
       encrypted << iv
@@ -360,7 +360,7 @@ private
     end
 
     def self.assert256BitBinary binary
-      raise '256-bit binary string required.' unless binary.size == 32
+      raise "256-bit binary string required. '#{binary.unpack("H*")}'" unless binary.size == 32
     end
 
     def self.assert128BitBinary binary
