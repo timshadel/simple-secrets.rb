@@ -30,21 +30,6 @@ describe 'the Ruby implementation should handle the compatibility standard items
     end
   end
 
-  describe 'string' do
-    let(:string){ 'This is the simple-secrets compatibility standard string.' }
-    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMqhBNKylbt-R7lByBe6fmIZdLIH2C2BPyYOtA-z2oGxclL_nZ0Ylo8e_gkf3bXzMn04l61i4dRsVCMJ5pL72suwuJMURy81n73eZEu2ASoVqSSVsnJo9WODLLmvsF_Mu0' }
-    let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNp54eHe8KRY2JqOo9H8bi3Hnm4G0-r5SNlXXhIW9S99qTxTwibKW7mLkaNMTeZ1ktDwx-4sjCpCnXPIyZe7-l6-o6XjIqazRdhGD6AH5ZS9UFqLpaqIowSUQ9CeiQeFBQ' }
-
-    it 'creates' do
-      expect(subject.pack(string)).to eq websafe_msgpack1
-    end
-
-    it 'recovers' do
-      expect(subject.unpack(websafe_msgpack1)).to eq string
-      expect(subject.unpack(websafe_msgpack5)).to eq string
-    end
-  end
-
   describe 'binary' do
     let(:binary){ "32".hex_to_bin(10) }
     let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yOnGuj4lHrhU_Uv8rMbpjXQJiqd3OMdktrw1asMDXy6jyLrVe9Ea-W09XC90Dgaxlk' }
@@ -82,7 +67,7 @@ describe 'the Ruby implementation should handle the compatibility standard items
     end
 
     it 'recovers' do
-      expect(subject.unpack(websafe_msgpack1)).to eq null
+      expect(subject.unpack(websafe_msgpack1)).to eq nil
     end
   end
 
