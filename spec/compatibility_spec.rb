@@ -11,72 +11,104 @@ describe 'the Ruby implementation should handle the compatibility standard items
   subject{ Packet.new master_key }
 
   before(:each) do
-    Primitives.stub(:nonce){ nonce }
-    OpenSSL::Random.stub(:random_bytes){ iv }
+    allow(Primitives).to receive(:nonce) { nonce }
+    allow(OpenSSL::Random).to receive(:random_bytes) { iv }
   end
 
   describe 'string' do
     let(:string){ 'This is the simple-secrets compatibility standard string.' }
-    let(:websafe){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMqhBNKylbt-R7lByBe6fmIZdLIH2C2BPyYOtA-z2oGxclL_nZ0Ylo8e_gkf3bXzMn04l61i4dRsVCMJ5pL72suwuJMURy81n73eZEu2ASoVqSSVsnJo9WODLLmvsF_Mu0' }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMqhBNKylbt-R7lByBe6fmIZdLIH2C2BPyYOtA-z2oGxclL_nZ0Ylo8e_gkf3bXzMn04l61i4dRsVCMJ5pL72suwuJMURy81n73eZEu2ASoVqSSVsnJo9WODLLmvsF_Mu0' }
+    let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNp54eHe8KRY2JqOo9H8bi3Hnm4G0-r5SNlXXhIW9S99qTxTwibKW7mLkaNMTeZ1ktDwx-4sjCpCnXPIyZe7-l6-o6XjIqazRdhGD6AH5ZS9UFqLpaqIowSUQ9CeiQeFBQ' }
 
     it 'creates' do
-      expect(subject.pack(string)).to eq websafe
+      expect(subject.pack(string)).to eq websafe_msgpack1
     end
 
     it 'recovers' do
-      expect(subject.unpack(websafe)).to eq string
+      expect(subject.unpack(websafe_msgpack1)).to eq string
+      expect(subject.unpack(websafe_msgpack5)).to eq string
+    end
+  end
+
+  describe 'string' do
+    let(:string){ 'This is the simple-secrets compatibility standard string.' }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMqhBNKylbt-R7lByBe6fmIZdLIH2C2BPyYOtA-z2oGxclL_nZ0Ylo8e_gkf3bXzMn04l61i4dRsVCMJ5pL72suwuJMURy81n73eZEu2ASoVqSSVsnJo9WODLLmvsF_Mu0' }
+    let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNp54eHe8KRY2JqOo9H8bi3Hnm4G0-r5SNlXXhIW9S99qTxTwibKW7mLkaNMTeZ1ktDwx-4sjCpCnXPIyZe7-l6-o6XjIqazRdhGD6AH5ZS9UFqLpaqIowSUQ9CeiQeFBQ' }
+
+    it 'creates' do
+      expect(subject.pack(string)).to eq websafe_msgpack1
+    end
+
+    it 'recovers' do
+      expect(subject.unpack(websafe_msgpack1)).to eq string
+      expect(subject.unpack(websafe_msgpack5)).to eq string
+    end
+  end
+
+  describe 'binary' do
+    let(:binary){ "32".hex_to_bin(10) }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yOnGuj4lHrhU_Uv8rMbpjXQJiqd3OMdktrw1asMDXy6jyLrVe9Ea-W09XC90Dgaxlk' }
+    let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMVgYX8jn_wUmumA0aJMLlWffSYU0oaJsyJsVjxxF96Ia6mZgAalv5iywbsKORqxtQ' }
+
+    it 'creates' do
+      expect(subject.pack(binary)).to eq websafe_msgpack1
+    end
+
+    it 'recovers' do
+      expect(subject.unpack(websafe_msgpack1)).to eq binary
+      expect(subject.unpack(websafe_msgpack5)).to eq binary
     end
   end
 
   describe 'numbers' do
     let(:number){ 65234 }
-    let(:websafe){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yN5I1SH6a75Y_qQlQIclwrVyOk6jJJnMrjeOm6D27_wD0DxwIY9cxSw8boQDgEsLKg' }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yN5I1SH6a75Y_qQlQIclwrVyOk6jJJnMrjeOm6D27_wD0DxwIY9cxSw8boQDgEsLKg' }
 
     it 'creates' do
-      expect(subject.pack(number)).to eq websafe
+      expect(subject.pack(number)).to eq websafe_msgpack1
     end
 
     it 'recovers' do
-      expect(subject.unpack(websafe)).to eq number
+      expect(subject.unpack(websafe_msgpack1)).to eq number
     end
   end
 
   describe 'nil' do
     let(:null){ nil }
-    let(:websafe){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yPYBCYpYMU-4WChi6L1O1GCEApGRhWlg13kVPLTb90cXcEN9vpYgvttgcBJBh6Tjv8' }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yPYBCYpYMU-4WChi6L1O1GCEApGRhWlg13kVPLTb90cXcEN9vpYgvttgcBJBh6Tjv8' }
 
     it 'creates' do
-      expect(subject.pack(null)).to eq websafe
+      expect(subject.pack(null)).to eq websafe_msgpack1
     end
 
     it 'recovers' do
-      expect(subject.unpack(websafe)).to eq null
+      expect(subject.unpack(websafe_msgpack1)).to eq null
     end
   end
 
   describe 'array' do
     let(:array){ ['This is the simple-secrets compatibility standard array.','This is the simple-secrets compatibility standard array.'] }
-    let(:websafe){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMKAFsDUUYwc2fKvPhP_RHYhDOUfJ58li1gJgg9sVeaKx9yC0vFkpxuTmzJP6hZjn6XXlrG6A7-EeNgyzvP547booi2LUi0ALyAzbCaR8abXqnzoNwITRz7TL0J_NkP2gfxbpwUvyBo8ZT0cxGRr9jGnW5F5s6D0jmKZTl209nDJEpXDFRDXCo5y08tmvMNogs7rsZYz74mAap3mrBS-J7W' }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMKAFsDUUYwc2fKvPhP_RHYhDOUfJ58li1gJgg9sVeaKx9yC0vFkpxuTmzJP6hZjn6XXlrG6A7-EeNgyzvP547booi2LUi0ALyAzbCaR8abXqnzoNwITRz7TL0J_NkP2gfxbpwUvyBo8ZT0cxGRr9jGnW5F5s6D0jmKZTl209nDJEpXDFRDXCo5y08tmvMNogs7rsZYz74mAap3mrBS-J7W' }
 
     it 'creates' do
-      expect(subject.pack(array)).to eq websafe
+      expect(subject.pack(array)).to eq websafe_msgpack1
     end
 
     it 'recovers' do
-      expect(subject.unpack(websafe)).to eq array
+      expect(subject.unpack(websafe_msgpack1)).to eq array
     end
   end
 
   describe 'map' do
     let(:map){ {'compatibility-key' => 'This is the simple-secrets compatibility standard map.'} }
-    let(:websafe){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNR4q6kPij6WINZKHgOqKHXYKrvvhyLbyFTsndgOx5M5yockEUwdSgv6jG_JYpAiU5R37Y7OIZnF3IN2EWtaFSuJko0ajcvoYgDPeLMvjAJdRyBUYIKcvR-g56_p4O7Uef3yJRnfCprG6jUdMyDBai_' }
+    let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNR4q6kPij6WINZKHgOqKHXYKrvvhyLbyFTsndgOx5M5yockEUwdSgv6jG_JYpAiU5R37Y7OIZnF3IN2EWtaFSuJko0ajcvoYgDPeLMvjAJdRyBUYIKcvR-g56_p4O7Uef3yJRnfCprG6jUdMyDBai_' }
 
     it 'creates' do
-      expect(subject.pack(map)).to eq websafe
+      expect(subject.pack(map)).to eq websafe_msgpack1
     end
 
     it 'recovers' do
-      expect(subject.unpack(websafe)).to eq map
+      expect(subject.unpack(websafe_msgpack1)).to eq map
     end
   end
 

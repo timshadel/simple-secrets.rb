@@ -17,26 +17,26 @@ describe Packet do
   describe '#initialize' do
     it 'sets its master key' do
       its_key = subject.instance_variable_get(:@master_key)
-      its_key.unpack('H*').first.should eq master_key
-      its_key.encoding.should eq Encoding::ASCII_8BIT
+      expect(its_key.unpack('H*').first).to eq(master_key)
+      expect(its_key.encoding).to eq(Encoding::ASCII_8BIT)
     end
 
     it 'sets its identity' do
       identity = Primitives.identify subject.instance_variable_get(:@master_key)
-      subject.instance_variable_get(:@identity).should eq identity
+      expect(subject.instance_variable_get(:@identity)).to eq(identity)
     end
   end
 
   describe '#build_body' do
     it 'concatenates the serialized body with a nonce' do
-      Primitives.should_receive(:nonce){ nonce }
-      subject.build_body(data).should eq test_body
+      expect(Primitives).to receive(:nonce) { nonce }
+      expect(subject.build_body(data)).to eq(test_body)
     end
   end
 
   describe '#body_to_data' do
     it 'it splits out the nonce and deserializes the body' do
-      subject.body_to_data(test_body).should eq data
+      expect(subject.body_to_data(test_body)).to eq(data)
     end
   end
 
@@ -46,9 +46,9 @@ describe Packet do
 
       cipher_data = subject.encrypt_body test_body, key
       decrypted_body = subject.decrypt_body cipher_data, key
-      test_body.should_not eq cipher_data
-      cipher_data.should_not eq decrypted_body
-      decrypted_body.should eq test_body
+      expect(test_body).not_to eq(cipher_data)
+      expect(cipher_data).not_to eq(decrypted_body)
+      expect(decrypted_body).to eq(test_body)
     end
   end
 
@@ -59,7 +59,7 @@ describe Packet do
 
       packet = subject.authenticate test_body, key, id
       data = subject.verify packet, key, id
-      data.should eq test_body
+      expect(data).to eq(test_body)
     end
 
     it 'returns nil if the key identity does not match' do
@@ -68,7 +68,7 @@ describe Packet do
 
       packet = subject.authenticate test_body, key, bad_id
       data = subject.verify packet, key, id
-      data.should be_nil
+      expect(data).to be_nil
     end
 
     it 'returns nil if the MAC does not match' do
@@ -79,17 +79,17 @@ describe Packet do
       packet = "#{packet[0...-32]}#{bad_mac}"
 
       data = subject.verify packet, key, id
-      data.should be_nil
+      expect(data).to be_nil
     end
   end
 
   describe '.pack and .unpack' do
     it 'encrypts and signs data into web-safe string, then verifies and decrypts it back' do
       packed_data = subject.pack data
-      packed_data.should_not eq data
+      expect(packed_data).not_to eq(data)
 
       unpacked_data = subject.unpack packed_data
-      unpacked_data.should eq data
+      expect(unpacked_data).to eq(data)
     end
   end
 end

@@ -213,9 +213,9 @@ describe Primitives do
       b = "12".hex_to_bin
       c = "11".hex_to_bin
 
-      expect(Primitives.compare(a,a)).to be_true
-      expect(Primitives.compare(a,b)).to be_false
-      expect(Primitives.compare(a,c)).to be_true
+      expect(Primitives.compare(a,a)).to be true
+      expect(Primitives.compare(a,b)).to be false
+      expect(Primitives.compare(a,c)).to be true
     end
 
     # Timing test, in progress from node.js version
@@ -330,6 +330,14 @@ describe Primitives do
       expect(Primitives.deserialize(Primitives.serialize('abcd'))).to eq('abcd')
       expect(Primitives.deserialize(Primitives.serialize([]))).to eq([])
       expect(Primitives.deserialize(Primitives.serialize({}))).to eq({})
+      buf = "32".hex_to_bin(10)
+      out = Primitives.deserialize(Primitives.serialize(buf))
+      expect(out).to eq(buf)
+      # msgpack bug: data is correctly extracted, but tagged with incorrect
+      #   encoding. Make sure it can be coerced back.
+      if out.encoding != buf.encoding
+        expect(out.force_encoding(buf.encoding)).to eq(buf)
+      end
     end
   end
 
