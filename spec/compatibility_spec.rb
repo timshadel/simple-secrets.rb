@@ -21,7 +21,7 @@ describe 'the Ruby implementation should handle the compatibility standard items
     let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNp54eHe8KRY2JqOo9H8bi3Hnm4G0-r5SNlXXhIW9S99qTxTwibKW7mLkaNMTeZ1ktDwx-4sjCpCnXPIyZe7-l6-o6XjIqazRdhGD6AH5ZS9UFqLpaqIowSUQ9CeiQeFBQ' }
 
     it 'creates' do
-      expect(subject.pack(string)).to eq websafe_msgpack1
+      expect(subject.pack(string)).to eq websafe_msgpack5
     end
 
     it 'recovers' do
@@ -36,7 +36,7 @@ describe 'the Ruby implementation should handle the compatibility standard items
     let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMVgYX8jn_wUmumA0aJMLlWffSYU0oaJsyJsVjxxF96Ia6mZgAalv5iywbsKORqxtQ' }
 
     it 'creates' do
-      expect(subject.pack(binary)).to eq websafe_msgpack1
+      expect(subject.pack(binary)).to eq websafe_msgpack5
     end
 
     it 'recovers' do
@@ -74,26 +74,30 @@ describe 'the Ruby implementation should handle the compatibility standard items
   describe 'array' do
     let(:array){ ['This is the simple-secrets compatibility standard array.','This is the simple-secrets compatibility standard array.'] }
     let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yMKAFsDUUYwc2fKvPhP_RHYhDOUfJ58li1gJgg9sVeaKx9yC0vFkpxuTmzJP6hZjn6XXlrG6A7-EeNgyzvP547booi2LUi0ALyAzbCaR8abXqnzoNwITRz7TL0J_NkP2gfxbpwUvyBo8ZT0cxGRr9jGnW5F5s6D0jmKZTl209nDJEpXDFRDXCo5y08tmvMNogs7rsZYz74mAap3mrBS-J7W' }
+    let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yP5Au9NtEbC-uoWkSPKgnAjODduuH_a2tH-zXaPNdqScWNR8snsQK2OufCVnb2OFk8O7VwgrObvx5gnGgC3pOsmk2Z5CasmOAfzn0B6uEnaBpiMOs74d0d70t07J4MdCRs1aDai9SJqxMpbjz5KJpVmSWqnT3n5KhzEdTLQwCuXQhSA0JKFaAlwQHh5tzq6ToWZZVR34REAGdAo7RMLSSi3' }
 
     it 'creates' do
-      expect(subject.pack(array)).to eq websafe_msgpack1
+      expect(subject.pack(array)).to eq websafe_msgpack5
     end
 
     it 'recovers' do
       expect(subject.unpack(websafe_msgpack1)).to eq array
+      expect(subject.unpack(websafe_msgpack5)).to eq array
     end
   end
 
   describe 'map' do
     let(:map){ {'compatibility-key' => 'This is the simple-secrets compatibility standard map.'} }
     let(:websafe_msgpack1){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNR4q6kPij6WINZKHgOqKHXYKrvvhyLbyFTsndgOx5M5yockEUwdSgv6jG_JYpAiU5R37Y7OIZnF3IN2EWtaFSuJko0ajcvoYgDPeLMvjAJdRyBUYIKcvR-g56_p4O7Uef3yJRnfCprG6jUdMyDBai_' }
+    let(:websafe_msgpack5){ 'W7l1PJaffzMzIzzpI1hg75AubQ_PNSjEUycoH1Z7GEwonPVW7yNR4q6kPij6WINZKHgOqKHXsI6Zwegq5A48uq2i-l13bNQWLY9Ho-lG_s6PzwQhjGz6BnCwAK66YsDBlTqflM-X1mviccZbvUV7K6i2ZPOs8gDUtMIVnu-ByDFopGwZUHjelkUZiLZcRKWXIYSLWyKp' }
 
     it 'creates' do
-      expect(subject.pack(map)).to eq websafe_msgpack1
+      expect(subject.pack(map)).to eq websafe_msgpack5
     end
 
     it 'recovers' do
       expect(subject.unpack(websafe_msgpack1)).to eq map
+      expect(subject.unpack(websafe_msgpack5)).to eq map
     end
   end
 
